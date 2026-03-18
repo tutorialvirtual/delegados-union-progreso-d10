@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delegados — UE Unión y Progreso D10</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red:    #D01A2B;
+    --red2:   #A8121F;
+    --red3:   #8C0F1B;
+    --blue:   #1A5DC8;
+    --white:  #FFFFFF;
+    --bg:     #C01020;
+    --bg2:    #A8121F;
+    --bg3:    #8C0F1B;
+    --surf:   rgba(0,0,0,.28);
+    --surf2:  rgba(0,0,0,.38);
+    --surfL:  rgba(255,255,255,.08);
+    --border: rgba(255,255,255,.13);
+    --borderB:rgba(0,0,0,.25);
+    --text:   #FFFFFF;
+    --muted:  rgba(255,255,255,.62);
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background: linear-gradient(160deg, #D01A2B 0%, #A8121F 45%, #8C0F1B 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Subtle noise texture overlay */
+  body::before {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 10% 0%, rgba(255,255,255,.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 100%, rgba(0,0,0,.3) 0%, transparent 60%);
+  }
+  /* Grid lines */
+  body::after {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; z-index:10; overflow:hidden;
+    padding:1.8rem 1.2rem 1.5rem;
+    border-bottom:1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,0,0,.18) 0%, transparent 100%);
+  }
+  .hero-inner {
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center; gap:.95rem;
+  }
+
+  /* VOS logotype */
+  .vos-logo { display:inline-flex; flex-direction:column; align-items:center; gap:.04rem; }
+  .vos-depende {
+    font-family:'Syne',sans-serif; font-weight:800;
+    font-size:1.05rem; letter-spacing:.22em; text-transform:uppercase;
+    color:rgba(255,255,255,.95);
+  }
+  .vos-de {
+    font-family:'Syne',sans-serif; font-weight:600;
+    font-size:.82rem; letter-spacing:.3em; text-transform:uppercase;
+    color:rgba(255,255,255,.65);
+  }
+  .vos-word {
+    font-family:'Syne',sans-serif; font-weight:800;
+    font-size:3.5rem; letter-spacing:-.03em; line-height:1;
+    color:var(--blue); text-shadow:0 0 40px rgba(26,93,200,.8), 0 2px 8px rgba(0,0,0,.4);
+    display:flex; align-items:center;
+  }
+  .vos-curl {
+    display:inline-block; width:26px; height:26px;
+    margin-left:3px; margin-bottom:5px;
+    border:3px solid rgba(255,255,255,.9);
+    border-left:none; border-bottom:none;
+    border-radius:0 50% 0 0; transform:rotate(15deg);
+  }
+
+  .hero-divider {
+    width:52px; height:3px;
+    background:linear-gradient(90deg,rgba(255,255,255,.9),var(--blue));
+    border-radius:99px;
+  }
+  .hero-title {
+    font-family:'Syne',sans-serif; font-weight:800;
+    font-size:clamp(1.6rem,5.5vw,2.3rem); line-height:1.1;
+    letter-spacing:-.02em; color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.3);
+  }
+  .hero-subtitle { font-size:1rem; color:rgba(255,255,255,.7); }
+
+
+
+  /* Meta chips — sin "Corte" */
+  .meta-row { display:flex; gap:.4rem; width:100%; max-width:420px; }
+  .meta-chip {
+    flex:1; background:rgba(0,0,0,.2); border:1px solid rgba(255,255,255,.15);
+    border-radius:10px; padding:.5rem .7rem;
+    display:flex; align-items:center; gap:.4rem;
+  }
+  .mc-icon { font-size:1.1rem; flex-shrink:0; }
+  .mc-lbl { font-size:.72rem; color:rgba(255,255,255,.6); font-weight:600; letter-spacing:.06em; text-transform:uppercase; line-height:1; margin-bottom:.13rem; }
+  .mc-val  { font-size:.95rem; color:#fff; font-weight:600; line-height:1; }
+
+  /* ── JEFES/AS SECTION ── */
+  .jefes-section {
+    position:relative; z-index:10;
+    padding:.8rem 1.2rem .3rem;
+  }
+  .jefes-label {
+    font-family:'Syne',sans-serif; font-weight:700;
+    font-size:.8rem; letter-spacing:.12em; text-transform:uppercase;
+    color:rgba(255,255,255,.55); margin-bottom:.55rem;
+  }
+  .jefes-grid {
+    display:grid; grid-template-columns:repeat(2,1fr); gap:.4rem;
+  }
+  .jefe-card {
+    background:rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.14);
+    border-radius:11px; padding:.6rem .75rem;
+    display:flex; align-items:center; gap:.55rem;
+    cursor:pointer; transition:background .18s, border-color .18s, transform .18s;
+    position:relative; overflow:hidden;
+  }
+  .jefe-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:var(--jc); border-radius:2px;
+  }
+  .jefe-card:hover, .jefe-card.active {
+    background:rgba(0,0,0,.38);
+    border-color:var(--jc);
+    transform:translateY(-1px);
+    box-shadow:0 4px 16px rgba(0,0,0,.3), 0 0 0 1px var(--jc);
+  }
+  .jefe-avatar {
+    width:36px; height:36px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:.88rem; color:#fff;
+    box-shadow:0 0 10px var(--jc);
+  }
+  .jefe-info { flex:1; min-width:0; }
+  .jefe-nombre {
+    font-family:'Syne',sans-serif; font-weight:700;
+    font-size:.88rem; color:#fff; line-height:1.2; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;
+  }
+  .jefe-rol { font-size:.74rem; color:var(--jc); font-weight:500; margin-top:.1rem; }
+  .jefe-cnt {
+    font-family:'Syne',sans-serif; font-weight:800; font-size:1rem;
+    color:var(--jc); flex-shrink:0;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    padding:.5rem 1.2rem .45rem;
+    position:relative; z-index:10;
+    display:flex; flex-direction:column; gap:.4rem;
+  }
+  .search-wrap { position:relative; }
+  .search-wrap svg {
+    position:absolute; left:.85rem; top:50%; transform:translateY(-50%);
+    color:rgba(255,255,255,.45); width:15px; height:15px; pointer-events:none;
+  }
+  input[type="search"] {
+    width:100%; background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.18);
+    border-radius:10px; padding:.75rem .9rem .75rem 2.5rem;
+    color:#fff; font-family:'DM Sans',sans-serif; font-size:1rem;
+    outline:none; transition:border-color .2s, background .2s;
+  }
+  input[type="search"]:focus {
+    background:rgba(0,0,0,.38); border-color:rgba(255,255,255,.4);
+  }
+  input[type="search"]::placeholder { color:rgba(255,255,255,.4); }
+
+  .row-controls { display:flex; gap:.4rem; align-items:center; }
+  .view-toggle {
+    display:flex; gap:.2rem; background:rgba(0,0,0,.25);
+    border:1px solid rgba(255,255,255,.15); border-radius:10px;
+    padding:.2rem; flex-shrink:0;
+  }
+  .view-btn {
+    background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+    padding:.45rem .75rem; border-radius:7px;
+    transition:background .2s,color .2s;
+    display:flex; align-items:center; justify-content:center; gap:.3rem;
+    font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; white-space:nowrap;
+  }
+  .view-btn.active { background:rgba(255,255,255,.15); color:#fff; }
+  .view-btn svg { width:15px; height:15px; }
+  .sort-btn {
+    background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.15);
+    color:rgba(255,255,255,.6); border-radius:10px; padding:.45rem .75rem;
+    font-size:.9rem; cursor:pointer; font-family:'DM Sans',sans-serif;
+    display:flex; align-items:center; gap:.28rem; white-space:nowrap;
+    transition:all .2s; flex-shrink:0;
+  }
+  .sort-btn:hover { border-color:rgba(255,255,255,.4); color:#fff; }
+  .sort-btn svg { width:14px; height:14px; }
+
+  .result-info {
+    padding:0 1.2rem .4rem; font-size:.86rem; color:rgba(255,255,255,.55);
+    position:relative; z-index:10; display:flex; align-items:center; gap:.5rem;
+  }
+  .result-info span { color:#fff; font-weight:600; }
+  .clear-btn {
+    margin-left:auto; background:rgba(0,0,0,.2); border:1px solid rgba(255,255,255,.2);
+    color:rgba(255,255,255,.65); border-radius:6px; padding:.25rem .6rem;
+    font-size:.82rem; cursor:pointer; font-family:'DM Sans',sans-serif;
+    transition:all .2s; display:none;
+  }
+  .clear-btn.show { display:block; }
+  .clear-btn:hover { background:rgba(0,0,0,.35); color:#fff; }
+
+  /* ── MAIN ── */
+  main { position:relative; z-index:10; padding:0 1.2rem 6rem; }
+
+  /* Footer */
+  .site-footer {
+    position:relative; z-index:10;
+    text-align:center; padding:1.2rem 1.2rem 5.5rem;
+    border-top:1px solid rgba(255,255,255,.1);
+    margin-top:.5rem;
+  }
+  .site-footer a {
+    display:inline-flex; align-items:center; gap:.45rem;
+    font-family:'Syne',sans-serif; font-size:.88rem; font-weight:600;
+    color:rgba(255,255,255,.7); text-decoration:none;
+    letter-spacing:.08em; text-transform:uppercase;
+    transition:color .2s;
+  }
+  .site-footer a:hover { color:rgba(255,255,255,.95); }
+  .site-footer a::before {
+    content:'▶';
+    color:#e8142e; font-size:.78rem;
+  }
+
+  .recinto-group { margin-bottom:1.4rem; }
+  .recinto-header {
+    display:flex; align-items:center; gap:.6rem;
+    margin-bottom:.65rem; padding:.6rem .85rem;
+    border-left:3px solid var(--c); border-radius:0 10px 10px 0;
+    background:rgba(0,0,0,.2);
+  }
+  .recinto-avatar {
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:.95rem; color:#fff;
+    box-shadow:0 0 10px var(--c);
+  }
+  .recinto-info { flex:1; min-width:0; }
+  .recinto-name { font-family:'Syne',sans-serif; font-weight:700; font-size:.98rem; color:#fff; line-height:1; }
+  .recinto-role { font-size:.76rem; margin-top:.13rem; font-weight:500; }
+  .recinto-badge {
+    font-family:'Syne',sans-serif; font-weight:800; font-size:.95rem;
+    border:1px solid var(--c); border-radius:8px; padding:.18rem .55rem;
+    color:var(--c); flex-shrink:0;
+    background:rgba(0,0,0,.2);
+  }
+
+  /* Cards */
+  .cards-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(255px,1fr));
+    gap:.5rem;
+  }
+  .card {
+    background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.12);
+    border-radius:13px; padding:.88rem 1rem;
+    position:relative; overflow:hidden;
+    transition:transform .18s,box-shadow .18s;
+    animation:fadeUp .3s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .card::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--c); border-radius:3px 0 0 3px;
+  }
+  .card::after {
+    content:''; position:absolute; top:-25px; right:-25px;
+    width:90px; height:90px; border-radius:50%;
+    background:radial-gradient(circle,var(--c),transparent 70%);
+    opacity:.07; pointer-events:none;
+  }
+  .card:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,.4); }
+  .card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:.48rem; }
+  .card-mesa { font-family:'Syne',sans-serif; font-weight:800; font-size:1.55rem; color:var(--c); line-height:1; text-shadow:0 0 12px var(--c); }
+  .card-mesa-lbl { font-size:.68rem; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.08em; font-weight:600; }
+  .card-idx {
+    font-size:.74rem; color:rgba(255,255,255,.45); background:rgba(0,0,0,.25);
+    border:1px solid rgba(255,255,255,.12); border-radius:6px;
+    padding:.13rem .4rem; font-weight:600;
+  }
+  .card-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1.12rem; color:#fff; line-height:1.25; margin-bottom:.1rem; }
+  .card-apellido { font-size:.92rem; color:rgba(255,255,255,.6); margin-bottom:.58rem; }
+  .card-chips { display:flex; flex-wrap:wrap; gap:.32rem; }
+  .chip {
+    display:inline-flex; align-items:center; gap:.3rem;
+    font-size:.82rem; color:rgba(255,255,255,.7); background:rgba(0,0,0,.22);
+    border:1px solid rgba(255,255,255,.12); border-radius:7px;
+    padding:.26rem .55rem; font-weight:500;
+    text-decoration:none; transition:background .18s, border-color .18s;
+  }
+  .chip:hover { background:rgba(0,0,0,.38); }
+  .chip svg { width:12px; height:12px; opacity:.6; flex-shrink:0; }
+  /* WhatsApp chip */
+  .chip-wa {
+    color:#ffffff;
+    border-color:rgba(37,211,102,.55);
+    background:rgba(37,211,102,.22);
+    font-weight:600;
+    cursor:pointer;
+  }
+  .chip-wa:hover { background:rgba(37,211,102,.35); border-color:rgba(37,211,102,.8); }
+
+  /* Table */
+  .table-wrap {
+    background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.12);
+    border-radius:13px; overflow:hidden;
+  }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { background:rgba(0,0,0,.3); }
+  thead th {
+    padding:.7rem .85rem;
+    font-family:'Syne',sans-serif; font-weight:700;
+    font-size:.74rem; letter-spacing:.1em; text-transform:uppercase;
+    color:rgba(255,255,255,.5); text-align:left; white-space:nowrap;
+    border-bottom:1px solid rgba(255,255,255,.1);
+  }
+  tbody tr { border-bottom:1px solid rgba(255,255,255,.07); transition:background .15s; animation:fadeUp .25s ease both; }
+  tbody tr:last-child { border-bottom:none; }
+  tbody tr:hover { background:rgba(0,0,0,.2); }
+  td { padding:.7rem .85rem; font-size:.94rem; color:rgba(255,255,255,.9); vertical-align:middle; }
+  .td-mesa { font-family:'Syne',sans-serif; font-weight:800; font-size:1.08rem; }
+  .td-name { font-weight:600; color:#fff; }
+  .td-muted { color:rgba(255,255,255,.55); font-size:.88rem; }
+  .td-dot {
+    display:inline-block; width:8px; height:8px; border-radius:50%;
+    margin-right:.4rem; vertical-align:middle; flex-shrink:0;
+  }
+  .td-wa {
+    display:inline-flex; align-items:center; gap:.35rem;
+    color:#ffffff; font-size:.88rem; font-weight:600;
+    background:rgba(37,211,102,.22); border:1px solid rgba(37,211,102,.55);
+    border-radius:6px; padding:.22rem .55rem;
+    text-decoration:none; transition:background .18s;
+  }
+  .td-wa:hover { background:rgba(37,211,102,.35); border-color:rgba(37,211,102,.8); }
+  .td-wa svg { width:13px; height:13px; }
+
+  .empty { text-align:center; padding:3rem 1rem; color:rgba(255,255,255,.5); }
+  .empty-icon { font-size:2.5rem; margin-bottom:.6rem; }
+  .empty strong { display:block; color:#fff; font-size:1rem; margin-bottom:.3rem; }
+
+  /* Floating bar */
+  .floating-bar {
+    position:fixed; bottom:.9rem; left:50%; transform:translateX(-50%);
+    z-index:100; background:rgba(120,8,15,.92); backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.2); border-radius:99px;
+    padding:.55rem 1.3rem;
+    display:flex; align-items:center; gap:.65rem;
+    font-size:.88rem; color:rgba(255,255,255,.7);
+    box-shadow:0 8px 32px rgba(0,0,0,.5); white-space:nowrap;
+  }
+  .fb-vos { font-family:'Syne',sans-serif; font-weight:800; font-size:.95rem; color:var(--blue); }
+  .fb-sep { width:1px; height:14px; background:rgba(255,255,255,.2); }
+  .floating-bar strong { color:#fff; font-family:'Syne',sans-serif; font-weight:700; }
+
+  /* Responsive */
+  @media(min-width:601px) {
+    .controls { flex-direction:row; }
+    .search-wrap { flex:1; }
+    .jefes-grid { grid-template-columns:repeat(4,1fr); }
+  }
+  @media(max-width:600px) {
+    .hide-xs { display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-inner">
+
+    <div class="vos-logo">
+      <div class="vos-depende">Depende</div>
+      <div class="vos-de">de</div>
+      <div class="vos-word">VOS<span class="vos-curl"></span></div>
+    </div>
+
+    <div class="hero-divider"></div>
+
+    <div>
+      <h1 class="hero-title">Delegados de Mesa</h1>
+      <p class="hero-subtitle">UE Unión y Progreso &nbsp;·&nbsp; Distrito 10</p>
+    </div>
+
+<!-- Meta: solo 2 chips, sin Corte -->
+    <div class="meta-row">
+      <div class="meta-chip">
+        <div class="mc-icon">📋</div>
+        <div><div class="mc-lbl">Total número de mesas en este recinto</div><div class="mc-val">23</div></div>
+      </div>
+
+    </div>
+
+  </div>
+</header>
+
+<!-- ── JEFES/AS DE RECINTO ── -->
+<div class="jefes-section" id="jefesSection"></div>
+
+<!-- ── CONTROLS ── -->
+<div class="controls">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="search" id="searchInput" placeholder="Buscar delegado, CI, teléfono, jefe/a de recinto…">
+  </div>
+  <div class="row-controls">
+    <div class="view-toggle">
+      <button class="view-btn active" id="btnCard" onclick="setView('card')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>Cards
+      </button>
+      <button class="view-btn" id="btnTable" onclick="setView('table')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18"/>
+        </svg>Tabla
+      </button>
+    </div>
+    <button class="sort-btn" onclick="toggleSort()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 6h18M7 12h10M11 18h2"/>
+      </svg>
+      <span id="sortLabel">Mesa ↑</span>
+    </button>
+  </div>
+</div>
+
+<div class="result-info">
+  Mostrando <span id="resultCount">21</span> de 21 delegados
+  <button class="clear-btn" id="clearBtn" onclick="clearFilters()">✕ Limpiar</button>
+</div>
+
+<main id="mainContent"></main>
+
+<div class="floating-bar">
+  <span class="fb-vos">VOS</span>
+  <div class="fb-sep"></div>
+  <strong id="fbCount">21</strong>&nbsp;delegados
+  <div class="fb-sep"></div>
+  <span id="fbRecinto">Todos los recintos</span>
+</div>
+
+<footer class="site-footer">
+  <a href="https://www.youtube.com/tutorialvirtual" target="_blank" rel="noopener">Creado por TutorialVirtual TV</a>
+</footer>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const RECINTOS_CFG = {
+  "Rosmery Coronado": { color:"#60A5FA", initial:"RC", role:"Jefa de Recinto",  tel:"" },
+  "Noemi Calderon":   { color:"#34D399", initial:"NC", role:"Jefa de Recinto",  tel:"" },
+  "Santos Alfaro":    { color:"#FCD34D", initial:"SA", role:"Jefe de Recinto",  tel:"" },
+  "Aydee Calderon":   { color:"#C084FC", initial:"AC", role:"Jefa de Recinto",  tel:"" },
+};
+
+// Delegados: campo r = nombre del jefe/a de recinto (para búsqueda)
+const DATA = [
+  {n:"Gabriel",           a:"García Severiche",    ci:"12385913", tel:"73648549", m:"1",  r:"Rosmery Coronado"},
+  {n:"Raul",              a:"Cruz Quispe",          ci:"13339431", tel:"71023572", m:"2",  r:"Rosmery Coronado"},
+  {n:"Maury Gabriel",     a:"Bermúdez Soria",       ci:"15620699", tel:"78580872", m:"3",  r:"Rosmery Coronado"},
+  {n:"Laura Tamar",       a:"Callahuara Camacho",   ci:"11318463", tel:"67716025", m:"4",  r:"Rosmery Coronado"},
+  {n:"Franklin",          a:"Flores Rodriguez",     ci:"13704019", tel:"69035952", m:"5",  r:"Rosmery Coronado"},
+  {n:"Enrique",           a:"Cruz Huallpa",         ci:"7677628",  tel:"75077811", m:"6",  r:"Rosmery Coronado"},
+  {n:"Aldo",              a:"Cruz Quispe",          ci:"8916665",  tel:"76380727", m:"7",  r:"Noemi Calderon"},
+  {n:"Johana",            a:"Farell Herrera",       ci:"13704054", tel:"75522040", m:"8",  r:"Noemi Calderon"},
+  {n:"Jose Luis",         a:"Gomez Torrico",        ci:"16768573", tel:"74937999", m:"9",  r:"Noemi Calderon"},
+  {n:"Yoel",              a:"Huanacota Auca",       ci:"12571208", tel:"63506098", m:"10", r:"Noemi Calderon"},
+  {n:"Yasely Vania",      a:"Pereira Vargas",       ci:"7758111",  tel:"67879286", m:"11", r:"Noemi Calderon"},
+  {n:"Leslie Dayana",     a:"Casanova Batallanos",  ci:"9023863",  tel:"67753827", m:"12", r:"Santos Alfaro"},
+  {n:"Maribel",           a:"Escalera",             ci:"4708853",  tel:"78564142", m:"13", r:"Santos Alfaro"},
+  {n:"Milena Esther",     a:"Aruni Mamani",         ci:"8232123",  tel:"60957886", m:"14", r:"Santos Alfaro"},
+  {n:"Sebastian",         a:"Parra Faldin",         ci:"13205111", tel:"71359289", m:"15", r:"Santos Alfaro"},
+  {n:"Melissa Kathia",    a:"Pereira Vargas",       ci:"7758104",  tel:"77605080", m:"16", r:"Santos Alfaro"},
+  {n:"Alejandro",         a:"Farell Lafuente",      ci:"13015520", tel:"78255549", m:"17", r:"Aydee Calderon"},
+  {n:"Nehemías Benjamin", a:"Rodríguez Meneses",    ci:"14353392", tel:"75594017", m:"18", r:"Aydee Calderon"},
+  {n:"Veronica Deysi",    a:"Coharite Toara",       ci:"8157110",  tel:"70995895", m:"19", r:"Aydee Calderon"},
+  {n:"Juan David",        a:"Velasco Cayo",         ci:"9830966",  tel:"72173923", m:"20", r:"Aydee Calderon"},
+  {n:"José Maria",        a:"Viruez Escobar",       ci:"16643164", tel:"69287634", m:"22", r:"Aydee Calderon"},
+];
+
+let activeRecinto=null, currentView='card', searchQuery='', sortAsc=true;
+
+// ── WA HELPER ─────────────────────────────────────────────────────────────────
+function waLink(tel){ return `https://wa.me/591${tel}`; }
+
+// WhatsApp SVG
+const WA_SVG=`<svg viewBox="0 0 24 24" fill="currentColor">
+  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.557 4.126 1.526 5.858L.057 23.486a.75.75 0 0 0 .921.921l5.63-1.469A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.686-.498-5.23-1.367l-.376-.215-3.898 1.017 1.018-3.898-.215-.376A9.945 9.945 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+</svg>`;
+
+// ── JEFES/AS SECTION ──────────────────────────────────────────────────────────
+function buildJefes(){
+  const sec=document.getElementById('jefesSection');
+  sec.innerHTML=`<div class="jefes-label">Jefes/as de Recinto</div><div class="jefes-grid" id="jefesGrid"></div>`;
+  const grid=document.getElementById('jefesGrid');
+  Object.entries(RECINTOS_CFG).forEach(([name,cfg])=>{
+    const cnt=DATA.filter(d=>d.r===name).length;
+    const isA=activeRecinto===name;
+    const card=document.createElement('div');
+    card.className='jefe-card'+(isA?' active':'');
+    card.style.setProperty('--jc',cfg.color);
+    card.innerHTML=`
+      <div class="jefe-avatar" style="background:${cfg.color};box-shadow:0 0 10px ${cfg.color}40">${cfg.initial}</div>
+      <div class="jefe-info">
+        <div class="jefe-nombre">${name}</div>
+        <div class="jefe-rol">${cfg.role}</div>
+      </div>
+      <div class="jefe-cnt">${cnt}</div>`;
+    card.onclick=()=>{activeRecinto=activeRecinto===name?null:name;buildJefes();render();};
+    grid.appendChild(card);
+  });
+}
+
+// ── FILTER ────────────────────────────────────────────────────────────────────
+function getFiltered(){
+  return DATA
+    .filter(d=>{
+      const q=searchQuery.toLowerCase().trim();
+      // Busca en nombre, apellido, ci, tel, mesa Y nombre del jefe/a de recinto
+      const match=!q||[d.n,d.a,d.ci,d.tel,d.m,d.r].some(v=>v.toLowerCase().includes(q));
+      return match&&(!activeRecinto||d.r===activeRecinto);
+    })
+    .sort((a,b)=>sortAsc?parseInt(a.m)-parseInt(b.m):parseInt(b.m)-parseInt(a.m));
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  const f=getFiltered();
+  document.getElementById('resultCount').textContent=f.length;
+  document.getElementById('fbCount').textContent=f.length;
+  document.getElementById('fbRecinto').textContent=activeRecinto||'Todos los recintos';
+  const hf=searchQuery||activeRecinto;
+  document.getElementById('clearBtn').className='clear-btn'+(hf?' show':'');
+  const main=document.getElementById('mainContent');
+  if(!f.length){
+    main.innerHTML='<div class="empty"><div class="empty-icon">🔍</div><strong>Sin resultados</strong>Intenta con otro nombre o término</div>';
+    return;
+  }
+  currentView==='card'?renderCards(f,main):renderTable(f,main);
+}
+
+function renderCards(f,container){
+  const grps={};
+  f.forEach(d=>{if(!grps[d.r])grps[d.r]=[];grps[d.r].push(d);});
+  container.innerHTML='';
+  let gi=0;
+  Object.entries(RECINTOS_CFG).forEach(([rec,cfg])=>{
+    if(!grps[rec])return;
+    const items=grps[rec];
+    const sec=document.createElement('div');
+    sec.className='recinto-group';
+    sec.innerHTML=`
+      <div class="recinto-header" style="--c:${cfg.color};border-left-color:${cfg.color}">
+        <div class="recinto-avatar" style="background:${cfg.color}30;border:1.5px solid ${cfg.color};box-shadow:0 0 8px ${cfg.color}50">${cfg.initial}</div>
+        <div class="recinto-info">
+          <div class="recinto-name">${rec}</div>
+          <div class="recinto-role" style="color:${cfg.color}">${cfg.role}</div>
+        </div>
+        <div class="recinto-badge" style="color:${cfg.color};border-color:${cfg.color}">${items.length}</div>
+      </div>`;
+    const grid=document.createElement('div');
+    grid.className='cards-grid';
+    items.forEach((d,i)=>{
+      gi++;
+      const card=document.createElement('div');
+      card.className='card';
+      card.style.cssText=`--c:${cfg.color};animation-delay:${i*30}ms`;
+      card.innerHTML=`
+        <div class="card-top">
+          <div><div class="card-mesa">${d.m}</div><div class="card-mesa-lbl">Mesa</div></div>
+          <div class="card-idx">#${gi}</div>
+        </div>
+        <div class="card-name">${d.n}</div>
+        <div class="card-apellido">${d.a}</div>
+        <div class="card-chips">
+          <span class="chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>${d.ci}
+          </span>
+          <a class="chip chip-wa" href="${waLink(d.tel)}" target="_blank" rel="noopener">
+            ${WA_SVG}${d.tel}
+          </a>
+        </div>`;
+      grid.appendChild(card);
+    });
+    sec.appendChild(grid);
+    container.appendChild(sec);
+  });
+}
+
+function renderTable(f,container){
+  container.innerHTML=`
+    <div class="table-wrap"><table>
+      <thead><tr>
+        <th>#</th><th>Mesa</th><th>Nombre</th><th>Apellidos</th>
+        <th class="hide-xs">C.I.</th><th>Llamar</th><th>Jefe/a Recinto</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table></div>`;
+  const tb=document.getElementById('tbody');
+  f.forEach((d,i)=>{
+    const cfg=RECINTOS_CFG[d.r];
+    const tr=document.createElement('tr');
+    tr.style.animationDelay=`${i*16}ms`;
+    tr.innerHTML=`
+      <td class="td-muted">${i+1}</td>
+      <td class="td-mesa" style="color:${cfg.color}">${d.m}</td>
+      <td class="td-name">${d.n}</td>
+      <td>${d.a}</td>
+      <td class="td-muted hide-xs">${d.ci}</td>
+      <td>
+        <a class="td-wa" href="${waLink(d.tel)}" target="_blank" rel="noopener">
+          ${WA_SVG}${d.tel}
+        </a>
+      </td>
+      <td><span class="td-dot" style="background:${cfg.color}"></span>${d.r}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// ── CONTROLS ──────────────────────────────────────────────────────────────────
+function setView(v){
+  currentView=v;
+  document.getElementById('btnCard').className='view-btn'+(v==='card'?' active':'');
+  document.getElementById('btnTable').className='view-btn'+(v==='table'?' active':'');
+  render();
+}
+function toggleSort(){
+  sortAsc=!sortAsc;
+  document.getElementById('sortLabel').textContent=`Mesa ${sortAsc?'↑':'↓'}`;
+  render();
+}
+function clearFilters(){
+  searchQuery=''; activeRecinto=null;
+  document.getElementById('searchInput').value='';
+  buildJefes(); render();
+}
+document.getElementById('searchInput').addEventListener('input',e=>{
+  searchQuery=e.target.value;
+  // Al escribir, la búsqueda es global: limpia el filtro de recinto activo
+  if(searchQuery){ activeRecinto=null; buildJefes(); }
+  render();
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildJefes();
+render();
+</script>
+</body>
+</html>
